@@ -52,6 +52,7 @@ public class CameraMovement : MonoBehaviour
     {
         if (CameraManager.Instance.GetCurrentState() == CameraState.Idle)
         {
+            SoundManager.Instance.PlaySound(1, 1);
             // Check if there is an obstacle
             if (m_raycastTest.RaycastCheckTag(transform.position, transform.forward * inputValue.y) == "Wall")
             {
@@ -82,6 +83,7 @@ public class CameraMovement : MonoBehaviour
         // If is Bumping -> Move backward
         if (CameraManager.Instance.GetCurrentState() == CameraState.Bumping)
         {
+            SoundManager.Instance.PlaySound(1, 2);
             m_lerpIntegration.Launch(transform.position, transform.position + (-transform.forward * m_currentDirection) / 4.5f, 0.15f);
             CameraManager.Instance.ChangeState(CameraState.Walking);
         }

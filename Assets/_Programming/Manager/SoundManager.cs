@@ -13,7 +13,7 @@ public class SoundManager : MonoBehaviour
         {
             if (instance == null)
             {
-                GameObject g = new GameObject("Sound Manager");
+                GameObject g = GameObject.Find("Sounds");
                 g.AddComponent<SoundManager>();
             }
 
@@ -26,6 +26,7 @@ public class SoundManager : MonoBehaviour
         if (instance == null)
             instance = this;
         DefineLists();
+        DefineAudioSource();
     }
     
     #endregion
@@ -33,6 +34,7 @@ public class SoundManager : MonoBehaviour
     public VolumeManager CurrentVolume {get ; private set ;}
 
     private SoundList[] allLists;
+    public AudioSource[] allSources { get ; private set ; }
 
     void DefineLists()
     {
@@ -43,6 +45,21 @@ public class SoundManager : MonoBehaviour
         allLists[0] = Resources.Load<SoundList>("ScriptableObjects/Audio/SoundList/Musics");
         allLists[1] = Resources.Load<SoundList>("ScriptableObjects/Audio/SoundList/EnvironmentSounds");
         allLists[2] = Resources.Load<SoundList>("ScriptableObjects/Audio/SoundList/UISounds");
+    }
+
+    void DefineAudioSource()
+    {
+        allSources = new AudioSource[3];
+
+        int count = 0;
+
+        while (count < allSources.Length)
+        {
+            allSources[count] = transform.GetChild(count).GetComponent<AudioSource>();
+            allSources[count].volume = CurrentVolume.GetVolume(count);
+
+            count++;
+        }
     }
 
     public void PlaySound(int currentRegion, int ID, AudioSource usableSource)
@@ -69,5 +86,31 @@ public class SoundManager : MonoBehaviour
     
         if (allLists[currentRegion].GetASound(ID).GetAudioClip() != null)
             usableSource.PlayOneShot(allLists[currentRegion].GetASound(ID).GetAudioClip(), CurrentVolume.GetVolume(currentRegion));
+    }
+
+    public void PlaySound(int currentRegion, int ID)
+    {
+        #region Security Check
+
+        if (currentRegion >= allLists.Length)
+        {
+            Debug.LogError("L'index envoyé est plus élevé que le nombre de List de Region");
+            return;
+        }
+        else if (ID >= allLists[currentRegion].GetLenght())
+        {
+            Debug.LogError("L'index envoyé est plus élevé que le nombre de son dans la liste");
+            return;
+        }
+        if (currentRegion >= CurrentVolume.GetVolumeTypesLength())
+        {
+            Debug.LogError("L'index envoyé est plus élevé que le nombre de paramètre de gestion de Volume");
+            return;
+        }
+
+        #endregion
+    
+        if (allLists[currentRegion].GetASound(ID).GetAudioClip() != null)
+            allSources[currentRegion].PlayOneShot(allLists[currentRegion].GetASound(ID).GetAudioClip(), CurrentVolume.GetVolume(currentRegion) / 100f);
     }
 }

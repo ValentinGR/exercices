@@ -15,7 +15,15 @@ public class VolumeManager : ScriptableObject
 
     public void ChangeTheVolume(int soundType, int volume)
     {
+        if (soundType < 0 || soundType > VolumeGestion.Length || soundType > SoundManager.Instance.allSources.Length)
+        {
+            Debug.LogError("L'index envoyé est plus élevé que le nombre de List de Region");
+            return;
+        }
+
         VolumeGestion[soundType] = volume;
+
+        SoundManager.Instance.allSources[soundType].volume = volume / 100f;
     }
 
     #endregion

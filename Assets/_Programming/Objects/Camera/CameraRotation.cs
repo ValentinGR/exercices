@@ -32,6 +32,7 @@ public class CameraRotation : MonoBehaviour
     {
         if (CameraManager.Instance.GetCurrentState() == CameraState.Idle)
         {
+            SoundManager.Instance.PlaySound(1, 0);
             m_lerpIntegration.Launch(transform.rotation.eulerAngles, transform.rotation.eulerAngles + new Vector3(0, inputValue.x * 90, 0), 0.2f);
             CameraManager.Instance.ChangeState(CameraState.Rotate);
         }
