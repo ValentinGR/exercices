@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59e80b9fcd8a6be46b3aeb4f371d8a1b, type: 3}
   m_Name: RotationWhoosh
   m_EditorClassIdentifier: 
-  m_mySound: {fileID: 8300000, guid: 67b9f7fba6874644fae0659dc1d4054b, type: 3}
+  m_mySound: {fileID: 8300000, guid: 15032d2038623f9468c2486305a5c8cc, type: 3}
   m_id: 0
   m_soundType: 1
